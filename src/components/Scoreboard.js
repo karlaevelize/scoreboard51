@@ -55,7 +55,7 @@ export default function Scoreboard(){
   const addPlayer = (name) => {
     //define what is a player
     const newPlayer = {id: players.length + 1, name: name, score: 0}
-    //add the new playe to the array
+    //add the new player to the array
     const newArray = [...players, newPlayer]
     //update the state
     setPlayers(newArray)

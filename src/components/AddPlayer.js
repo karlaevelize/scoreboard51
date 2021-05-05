@@ -5,6 +5,7 @@ export default function AddPlayer(props){
   const [name, setName] = useState("")
 
   const handleSubmit = (event) => {
+    //prevent the page from refreshing
     event.preventDefault()
 
     if(!name){
@@ -18,6 +19,8 @@ export default function AddPlayer(props){
     }
 
     props.addPlayer(name)
+
+    //clean up the input field after submit
     setName("")
   }
   
