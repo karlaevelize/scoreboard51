@@ -1,5 +1,15 @@
 import { useState } from "react"
 import Player from "./Player"
+import AddPlayer from "./AddPlayer"
+
+function compare_score(player_a, player_b) {
+  return player_b.score - player_a.score;
+}
+
+function compare_name(player_a, player_b) {
+  return player_a.name.localeCompare(player_b.name);
+}
+
 
 export default function Scoreboard(){
 
@@ -10,6 +20,7 @@ export default function Scoreboard(){
     { id: 4, name: "Anthony", score: 1 }]
 
   const [players, setPlayers] = useState(playersData)
+  const [sortBy, setSortBy] = useState("score")
 
   const incrementScore = (id) => {
     //check if we got the right id to update
@@ -33,10 +44,33 @@ export default function Scoreboard(){
     setPlayers(updatedArray)
   }
 
+  const changeSorting = (event) => {
+    setSortBy(event.target.value)
+  }
+
+  const arraySorted = sortBy === "name" 
+    ? [...players].sort(compare_name)
+    : [...players].sort(compare_score)
+
+  const addPlayer = (name) => {
+    //define what is a player
+    const newPlayer = {id: players.length + 1, name: name, score: 0}
+    //add the new playe to the array
+    const newArray = [...players, newPlayer]
+    //update the state
+    setPlayers(newArray)
+  }
+
   return(
     <div>
-      <button>Randomize Score</button>
-      {players.map(player => {
+      <button>Randomize Score</button> <button>Reset Scores</button>
+      <br/>
+      <br/>
+      Sort: <select onChange={changeSorting} value={sortBy}>
+        <option value="name">Name</option>
+        <option value="score">Score</option>
+      </select>
+      {arraySorted.map(player => {
         return <Player 
           key={player.id}
           id={player.id}
@@ -44,6 +78,7 @@ export default function Scoreboard(){
           score={player.score}
           incrementScore={incrementScore}/>
       })}
+      <AddPlayer addPlayer={addPlayer}/>
     </div>
   )
 }
